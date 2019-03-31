@@ -48,6 +48,9 @@ function renderPlayers(list) {
     })
   } else {
     console.log('ay wow')
-    return m("h3[style=margin: auto; padding: 70px 0;]", "Loading hehe")
+    return m("div.row[style=margin: 0 auto; padding: 90px 50%;text-align: center;display: inline-block;]", [
+        m("div.spinner"),
+        m("h3", "Loading hehe")
+    ])
   }
 }

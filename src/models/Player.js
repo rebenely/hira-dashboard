@@ -16,6 +16,24 @@ var Player = {
       m.redraw()
     })
   },
+  getTopPlayerAccuracy: function () {
+    var maxInd = 0;
+    for(let i = 0; i < Player.list.length; i++){
+      if(Player.list[maxInd].total_correct/Player.list[maxInd].total_item < Player.list[i].total_correct/Player.list[i].total_item) {
+        maxInd = i;
+      }
+    }
+    return Player.list[maxInd]
+  },
+  getTopPlayerProgress: function () {
+    var maxInd = 0;
+    for(let i = 0; i < Player.list.length; i++){
+      if(Player.list[maxInd].story < Player.list[i].story) {
+        maxInd = i;
+      }
+    }
+    return Player.list[maxInd]
+  },
   load: function (username) {
     var found = false;
 
