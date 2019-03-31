@@ -1,6 +1,6 @@
 var m = require("mithril")
 var Player = {
-  uri: "http://192.168.1.5:8081/",
+  uri: "http://hira-gumagana.herokuapp.com/",
   current: {},
   list: [],
   loadList: function () {
