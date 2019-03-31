@@ -64,6 +64,16 @@ function RadarChart() {
                 data: {
                     labels: ['A', 'B', 'C', 'D'],
                     datasets: [{
+                      backgroundColor: [
+                          'rgba(255, 99, 132, 0.2)',
+                          'rgba(54, 162, 235, 0.2)',
+                          'rgba(255, 206, 86, 0.2)',
+                      ],
+                      borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                      ],
                         label: "Dungeon Runs",
                         data: [Player.current.total_pattern_A, Player.current.total_pattern_B, Player.current.total_pattern_C, Player.current.total_pattern_D]
                     }]
@@ -93,7 +103,10 @@ function LineChart() {
     return {
         oncreate: function(vnode) {
             // Initialize 3rd party lib here
-
+            var scheds = []
+            for ( let i = 0; i < Player.current.schedule.length; i++) {
+              scheds.push(Player.current.schedule[i].deadline)
+            }
             lineChart = new Chart(vnode.dom, {
                 type: 'line',
                 data: {
@@ -242,7 +255,7 @@ function renderPage(obj) {
             m("div.col-sm-6", [
               m("div", {class: "card fluid"}, [
                 m("div.section", [
-                  m("h1", "Time Usage"),
+                  m("h1", "Persistence"),
                 ]),
                 m("div.section", [
                   m(RadarChart),
@@ -315,7 +328,10 @@ function renderPage(obj) {
   ])
   } else {
     console.log('ay wow')
-    return m("h3[style=margin: auto; padding: 70px 0;text-align: center;]", "Loading hehe")
+    return m("div.row[style=margin: 0 auto; padding: 90px 50%;text-align: center;display: inline-block;]", [
+        m("div.spinner"),
+        m("h3", "Loading hehe")
+    ])
   }
 
 
@@ -340,7 +356,10 @@ function renderCharacters(list) {
     })
   } else {
     console.log('ay wow')
-    return m("h3[style=margin: auto; padding: 70px 0;text-align: center;]", "Loading hehe")
+    return m("div.row[style=margin: 0 auto; padding: 90px 50%;text-align: center;display: inline-block;]", [
+        m("div.spinner"),
+        m("h3", "Loading hehe")
+    ])
   }
 }
 
@@ -363,6 +382,9 @@ function renderDungeons(list) {
     })
   } else {
     console.log('ay wow')
-    return m("h3[style=margin: auto; padding: 70px 0;text-align: center;]", "Loading hehe")
+    return m("div.row[style=margin: 0 auto; padding: 90px 50%;text-align: center;display: inline-block;]", [
+        m("div.spinner"),
+        m("h3", "Loading hehe")
+    ])
   }
 }
