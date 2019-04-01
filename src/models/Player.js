@@ -1,8 +1,9 @@
 var m = require("mithril")
 var Player = {
-  uri: "http://192.168.1.5:8081/",
+  uri: "http://hira-gumagana.herokuapp.com/",
   current: {},
   list: [],
+  pageChars: [],
   loadList: function () {
     return m.request({
       method: "GET",
@@ -53,7 +54,8 @@ var Player = {
     if(!found) {
       Player.current = undefined
     }
-  }
+  },
 }
+
 
 module.exports = Player
