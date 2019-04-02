@@ -4,6 +4,7 @@ var Player = {
   uri: "http://hira-gumagana.herokuapp.com/",
   current: {},
   list: [],
+  pageChars: [],
   loadList: function () {
     return m.request({
       method: "GET",
@@ -117,7 +118,8 @@ var Player = {
     if(!found) {
       Player.current = undefined
     }
-  }
+  },
 }
+
 
 module.exports = Player

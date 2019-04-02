@@ -1,6 +1,62 @@
 const m = require('mithril').default
 var Player = require("../models/Player")
 
+var FilteredPages = {
+  controller : function(){
+    this.filter = ''
+    this.index  = 0
+  },
+
+  view : function( ctrl, pageLength, items ){
+    return m( '.FilteredPages',
+      m( 'input', {
+        value : ctrl.filter,
+        oninput : function(){
+          ctrl.filter = this.value
+          ctrl.index  = 0
+        }
+      } ),
+
+      m( 'p',
+        m( 'a', {
+          innerHTML : 'Back',
+          onclick   : function(){
+            if( ctrl.index > 0 )
+              ctrl.index--
+          }
+        } ),
+
+        ' ',
+
+        m( 'a', {
+          innerHTML : 'Next',
+          onclick   : function(){
+            var newIndex = ctrl.index + 1
+
+            if( newIndex < items / pageLength )
+              ctrl.index = newIndex
+          }
+        } )
+      ),
+
+      m( '.page',
+        items
+          // Filter the items according to your requirements
+          .filter( function( item ){ return item.includes( ctrl.filter ) } )
+          // Paginate the filtered list using our reducer
+          .reduce( paginate, [] )
+          // Take the page at the current index
+          [ ctrl.index ]
+            // Map over the items on this page
+            .map( function( item ){
+              // Produce a view for each item
+              return m( 'p', item )
+            } )
+      )
+    )
+  }
+}
+
 function PieChart() {
     var piechart
     return {
@@ -13,7 +69,7 @@ function PieChart() {
                 data: {
                       datasets: [{
                           label: "Time Usage",
-                          data: [Math.round(Player.current.total_battle_time), Player.current.total_distracted, Player.current.total_idle, Player.current.exs_time],
+                          data: [Math.round(Player.current.total_battle_time), Player.current.total_distracted, Player.current.total_idle],
                           backgroundColor: [
                               'rgba(255, 99, 132, 0.2)',
                               'rgba(54, 162, 235, 0.2)',
@@ -28,8 +84,7 @@ function PieChart() {
                       labels: [
                           'Battle',
                           'Distracted',
-                          'Idle',
-                          'Misc'
+                          'Idle'
                       ],
 
                 },
@@ -193,6 +248,8 @@ module.exports = {
     }
     Player.load(vnode.attrs.username)
   },
+  oncreate: function(vnode) {
+  },
   onupdate: function(vnode) {
     if(Player.current == undefined) {
         Player.load(vnode.attrs.username)
@@ -232,7 +289,7 @@ function renderPage(obj) {
                       m("p", "Sessions:"),
                 ]),
                 m("div.col-sm-3", [
-                      m("p", Player.current.session-1),
+                      m("p", Player.current.session),
                 ]),
               ]),
               m("div.row", [
@@ -291,7 +348,7 @@ function renderPage(obj) {
                   m(PieChart),
                 ]),
                 m("div.section", [
-                  m("small[style=text-align: center;]","Misc due to timeout counters")
+                  m("small[style=text-align: center;]","Does not necessarily show all time usage but proportions")
                 ]),
               ])
             ]),
@@ -394,7 +451,8 @@ function renderCharacters(list) {
 
   if (list.length > 0) {
     console.log('ay wow!')
-    return list.map(function(chara) {
+    return m("div", [
+      list.slice(0, 13).map(function(chara) {
         return m("div.row", [
           m("div.col-sm-4", [
                 m("p", chara.character),
@@ -406,10 +464,47 @@ function renderCharacters(list) {
                 m("p",  Math.round(chara.accuracy*100)),
           ]),
         ])
-    })
+      }),
+      m("label[syle=cursor:pointer;text-align:center;margin: auto;]", {"for": "modal-control", "class": "button"}, "Show All"),
+      m("input[syle=cursor:pointer;]", {"type": "checkbox", "class": "modal", "id": "modal-control"}),
+      m("div.row", [
+        m("div.card", [
+          m("label.modal-close", {"for": "modal-control"}),
+          m("h3", "Character Accuracy"),
+          m("div.section", [
+            m("div.row", [
+              m("div.col-sm-4", [
+                    m("p[style=font-weight:bold;]", "Character"),
+              ]),
+              m("div.col-sm-4", [
+                    m("p[style=font-weight:bold;]", "Encounters"),
+              ]),
+              m("div.col-sm-4", [
+                    m("p[style=font-weight:bold;]", "Accuracy"),
+              ]),
+            ]),
+            list.map(function(chara) {
+              return m("div.row", [
+                m("div.col-sm-4", [
+                      m("p", chara.character),
+                ]),
+                m("div.col-sm-4", [
+                      m("p", chara.total),
+                ]),
+                m("div.col-sm-4", [
+                      m("p",  Math.round(chara.accuracy*100)),
+                ]),
+              ])
+            }),
+          ])
+        ])
+
+      ]),
+    ])
+
   } else {
     console.log('ay wow')
-    return m("div.row[style=margin: 0 auto; padding: 90px 50%;text-align: center;display: inline-block;]", [
+    return m("div.row[style=margin: 0 auto; padding: 20px 30%;text-align: center;display: inline-block;]", [
         m("div.spinner"),
         m("h3", "Loading hehe")
     ])
@@ -435,9 +530,65 @@ function renderDungeons(list) {
     })
   } else {
     console.log('ay wow')
-    return m("div.row[style=margin: 0 auto; padding: 90px 50%;text-align: center;display: inline-block;]", [
+    return m("div.row[style=margin: 0 auto; padding: 20px 30%;text-align: center;display: inline-block;]", [
         m("div.spinner"),
         m("h3", "Loading hehe")
     ])
+  }
+}
+
+var FilteredPages = {
+  controller : function(){
+    this.filter = ''
+    this.index  = 0
+  },
+
+  view : function( ctrl, pageLength, items ){
+    return m( '.FilteredPages',
+      m( 'input', {
+        value : ctrl.filter,
+        oninput : function(){
+          ctrl.filter = this.value
+          ctrl.index  = 0
+        }
+      } ),
+
+      m( 'p',
+        m( 'a', {
+          innerHTML : 'Back',
+          onclick   : function(){
+            if( ctrl.index > 0 )
+              ctrl.index--
+          }
+        } ),
+
+        ' ',
+
+        m( 'a', {
+          innerHTML : 'Next',
+          onclick   : function(){
+            var newIndex = ctrl.index + 1
+
+            if( newIndex < items / pageLength )
+              ctrl.index = newIndex
+          }
+        } )
+      ),
+
+      m( '.page',
+        items
+          // Filter the items according to your requirements
+          .filter( function( item ){ return item.includes( ctrl.filter ) } )
+          // Paginate the filtered list using our reducer
+          .reduce( paginate, [] )
+          // Take the page at the current index
+          [ ctrl.index ]
+            // Map over the items on this page
+            .map( function( item ){
+              // Produce a view for each item
+              return m( 'p', item )
+            } )
+      )
+    )
   }
 }
