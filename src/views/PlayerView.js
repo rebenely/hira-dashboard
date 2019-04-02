@@ -52,14 +52,57 @@ function PieChart() {
     }
 }
 
-
 function RadarChart() {
-    var radarChart
+    var RadarChart
+    return {
+      oncreate: function(vnode) {
+          // Initialize 3rd party lib here
+
+          barChart = new Chart(vnode.dom, {
+              type: 'radar',
+              data: {
+                  labels: ['Persistence','Help-Seeking', 'Environment Structuring', 'Time Management'],
+                  datasets: [{
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                    ],
+                    borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                    ],
+                      label: "Dungeon Runs",
+                      data: [Player.current.total_pattern_A, Player.current.total_pattern_B, Player.current.total_pattern_C, Player.current.total_pattern_D]
+                  }]
+              },
+              options: {
+                title: {
+                  display: true,
+                  text: 'Pattern'
+                }
+              }
+          });
+          m.redraw()
+      },
+      onremove: function() {
+          // Cleanup 3rd party lib on removal
+          barChart.destroy()
+      },
+      view: function() {
+          return m('canvas#barChart')
+      }
+  }
+}
+
+function BarChart() {
+    var barChart
     return {
         oncreate: function(vnode) {
             // Initialize 3rd party lib here
 
-            radarChart = new Chart(vnode.dom, {
+            barChart = new Chart(vnode.dom, {
                 type: 'bar',
                 data: {
                     labels: ['A', 'B', 'C', 'D'],
@@ -89,10 +132,10 @@ function RadarChart() {
         },
         onremove: function() {
             // Cleanup 3rd party lib on removal
-            radarChart.destroy()
+            barChart.destroy()
         },
         view: function() {
-            return m('canvas#radarChart')
+            return m('canvas#barChart')
         }
     }
 }
@@ -258,7 +301,7 @@ function renderPage(obj) {
                   m("h1", "Persistence"),
                 ]),
                 m("div.section", [
-                  m(RadarChart),
+                  m(BarChart),
                 ]),
                 m("div.section", [
                   m("small[style=text-align: center;]","Patterns are defined in the paper")
@@ -319,6 +362,16 @@ function renderPage(obj) {
             ]),
             m("div.section", [
               m(LineChart),
+            ]),
+          ])
+        ]),
+        m("div.col-sm-5", [
+          m("div[style=padding: 10px 0px]", {class: "card fluid"}, [
+            m("div.section", [
+              m("h1", "Skills")
+            ]),
+            m("div.section", [
+              m(RadarChart),
             ]),
           ])
         ]),
