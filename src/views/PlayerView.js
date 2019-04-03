@@ -261,6 +261,7 @@ module.exports = {
 }
 function renderPage(obj) {
   if(obj) {
+    Player.getAllSrl();
     return m("div", [
       m("div.row", [
         m("div.col-sm-4", [
@@ -271,7 +272,7 @@ function renderPage(obj) {
                     m("h1", Player.current.username),
                   ]),
                   m("div.col-sm-3", [
-                    m("h2[style=color: green; text-align: right;]", {class:"tooltip bottom", "aria-label": "LA Score"}, 6969),
+                    m("h2[style=color: green; text-align: right;]", {class:"tooltip bottom", "aria-label": "LA Score"}, Player.current.pe + Player.current.hs + Player.current.es + Player.current.tm),
                   ])
                 ])
             ]),
