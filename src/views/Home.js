@@ -9,8 +9,8 @@ module.exports = {
       m("h1[style='font-size:4rem']", "Welcome to Hira Dashboard!"),
       renderPlayerCount(Player.list),
       renderBestAccuracy(Player.getTopPlayerAccuracy()),
-      renderBestProgress(Player.getTopPlayerProgress()),
-      renderFinishedList(["Student 99","b", "c", "d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","a","b", "c", "d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u"]),
+      renderBestSRL(Player.getTopPlayerSRL()),
+      renderFinishedList(Player.getPlayerCompleted()),
       renderSRLChart(Player.list)
     ])
   }
@@ -24,11 +24,11 @@ function renderBestAccuracy(playa) {
     ])
   }
 }
-function renderBestProgress(playa) {
+function renderBestSRL(playa) {
   if(playa != undefined) {
     return m("h1[style='font-size:3rem']", [
        m("span[style=color: lightblue;cursor:pointer;]", {href: "/player/" + playa.username, oncreate: m.route.link}, playa.username),
-       " leads the completion ranking!"
+       " leads the SRL ranking!"
     ])
   }
 }
@@ -41,7 +41,8 @@ function renderPlayerCount(playas) {
   } else {
     return m("div.row[style=margin: 0 auto; padding: 50px 0%;text-align: center;display: inline-block;]", [
         m("div.spinner"),
-        m("h3", "Loading hehe")
+        m("h3", "Loading"),
+        m("h6", "or no data captured yet...")
     ])
   }
 }
@@ -109,14 +110,14 @@ function renderFinishedUsers (finished, row) {
   if (finished.length > 0){
     return finished.map(function(a, index) {
       return  [m("div.col-sm-1[style=text-align: right;]", [m("p", (index*8)+row)]),
-            m("div.col-sm-1[style=padding-right: 0;text-align: left;]", [m("p", a)])]
+            m("div.col-sm-1[style=padding-right: 0;text-align: left;]", [m("p", a.username)])]
     })
   }
 }
 
 function renderFinishedList(finished) {
   return m("div.section", {class: "card fluid"}, [
-      m("h2", "Players who have accomplished the game"),
+      m("h2", "Players who have accomplished the game. (Ranked by date finished)"),
       m("div.row",[ //row 1
       renderFinishedUsers(
         finished.reduce((output,cur,index,)=>{

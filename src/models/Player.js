@@ -20,7 +20,7 @@ var Player = {
       Player.list[i].pe += isNaN(value) || !isFinite(value) ? 0 : value*.3
       value = 0;
 
-      //Acuracy vs Character
+      //Accuracy vs Character
       for (let j = 0; j < Player.list[i].encounters.length; j++){
         value += Player.list[i].encounters[j].accuracy;
       }
@@ -83,16 +83,10 @@ var Player = {
           break;
         }
       }
-      //pagnatapos
-      //may butal
-      //di tapos walang butal 
       value = value/j
       Player.list[i].tm += isNaN(value) || !isFinite(value) ? 0 : value*.35
 
       Player.list[i].tm *= 25;
-      console.log(Player.list[i].username)
-      console.log(Player.list[i].tm+Player.list[i].es+Player.list[i].hs+Player.list[i].pe)
-      console.log(Player.list[i])
     }
   },
   loadList: function () {
@@ -111,17 +105,21 @@ var Player = {
   },
   getTopPlayerAccuracy: function () {
     var maxInd = 0;
+    var valuemaxInd = 0;
+    var valuei = 0;
     for(let i = 0; i < Player.list.length; i++){
-      if(Player.list[maxInd].total_correct/Player.list[maxInd].total_items < Player.list[i].total_correct/Player.list[i].total_items) {
+      valuemaxInd = Player.list[maxInd].total_correct/Player.list[maxInd].total_items;
+      valuei = Player.list[i].total_correct/Player.list[i].total_items
+      if( (isNaN(valuemaxInd) || !isFinite(valuemaxInd) ? 0 : valuemaxInd) < (isNaN(valuei) || !isFinite(valuei) ? 0 : valuei)) {
         maxInd = i;
       }
     }
     return Player.list[maxInd]
   },
-  getTopPlayerProgress: function () {
+  getTopPlayerSRL: function () {
     var maxInd = 0;
     for(let i = 0; i < Player.list.length; i++){
-      if(Player.list[maxInd].story < Player.list[i].story) {
+      if(Player.list[maxInd].pe + Player.list[maxInd].hs + Player.list[maxInd].es + Player.list[maxInd].tm < Player.list[i].pe + Player.list[i].hs + Player.list[i].es + Player.list[i].tmy) {
         maxInd = i;
       }
     }
@@ -131,7 +129,7 @@ var Player = {
     finished = [];
     for(let i = 0 ; i < Player.list.length ; i++){
       if(Player.list[i].date_finished!=undefined){
-        finished.push[Player.list[i]]
+        finished.push(Player.list[i])
       }
     }
     finished.sort((a,b)=>{
