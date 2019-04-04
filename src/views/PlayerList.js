@@ -12,7 +12,6 @@ function renderPlayers(list) {
 
   if (list.length > 0) {
     console.log('ay wow')
-    Player.getAllSrl();
     return list.map(function(user) {
         return m("div[style=margin: 10px 5px;]", {class :"card small"}, [
            m("div.section[style=cursor:pointer;]", {href: "/player/" + user.username, oncreate: m.route.link},[
