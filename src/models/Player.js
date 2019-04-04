@@ -111,7 +111,7 @@ var Player = {
       valuemaxInd = Player.list[maxInd].total_correct/Player.list[maxInd].total_items;
       valuei = Player.list[i].total_correct/Player.list[i].total_items
       if( (isNaN(valuemaxInd) || !isFinite(valuemaxInd) ? 0 : valuemaxInd) < (isNaN(valuei) || !isFinite(valuei) ? 0 : valuei)) {
-        maxInd = i;
+        maxInd = i;   
       }
     }
     return Player.list[maxInd]
@@ -119,7 +119,7 @@ var Player = {
   getTopPlayerSRL: function () {
     var maxInd = 0;
     for(let i = 0; i < Player.list.length; i++){
-      if(Player.list[maxInd].pe + Player.list[maxInd].hs + Player.list[maxInd].es + Player.list[maxInd].tm < Player.list[i].pe + Player.list[i].hs + Player.list[i].es + Player.list[i].tmy) {
+      if(Player.list[maxInd].pe + Player.list[maxInd].hs + Player.list[maxInd].es + Player.list[maxInd].tm < Player.list[i].pe + Player.list[i].hs + Player.list[i].es + Player.list[i].tm) {
         maxInd = i;
       }
     }
