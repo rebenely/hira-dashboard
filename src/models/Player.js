@@ -133,7 +133,7 @@ var Player = {
       }
     }
     finished.sort((a,b)=>{
-      return moment(b.date_finished).diff(moment(a.date_finished),"seconds")
+      return moment(a.date_finished).diff(moment(b.date_finished),"seconds")
     })
     return finished;
   },

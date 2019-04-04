@@ -100,7 +100,7 @@ function TryChart() {
           barChart.destroy()
       },
       view: function() {
-          return m('canvas#bah2", "lmao"rChart')
+          return m('canvas#barChart')
       }
   }
 }
