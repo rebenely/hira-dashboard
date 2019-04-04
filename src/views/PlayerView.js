@@ -71,14 +71,14 @@ function PieChart() {
                           label: "Time Usage",
                           data: [Math.round(Player.current.total_battle_time), Player.current.total_distracted, Player.current.total_idle],
                           backgroundColor: [
-                              'rgba(255, 99, 132, 0.2)',
-                              'rgba(54, 162, 235, 0.2)',
-                              'rgba(255, 206, 86, 0.2)',
+                              'rgba(255, 99, 132, 0.7)',
+                              'rgba(54, 162, 235, 0.7)',
+                              'rgba(255, 206, 86, 0.7)',
                           ],
                           borderColor: [
-                            'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)',
+                            'rgba(255, 99, 132, 1.4)',
+                            'rgba(54, 162, 235, 1.4)',
+                            'rgba(255, 206, 86, 1.4)',
                           ],
                       }],
                       labels: [
@@ -166,14 +166,14 @@ function BarChart() {
                     labels: ['Fast-Correct', 'Slow-Correct', 'Slow-Incorrect', 'Fast-Incorrect'],
                     datasets: [{
                       backgroundColor: [
-                          'rgba(255, 99, 132, 0.2)',
-                          'rgba(54, 162, 235, 0.2)',
-                          'rgba(255, 206, 86, 0.2)',
+                          'rgba(255, 99, 132, 1)',
+                          'rgba(54, 162, 235, 1)',
+                          'rgba(255, 206, 86, 1)',
                       ],
                       borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
+                        'rgba(255, 99, 132, 2)',
+                        'rgba(54, 162, 235, 2)',
+                        'rgba(255, 206, 86, 2)',
                       ],
                         label: "Dungeon Runs",
                         data: [Player.current.total_pattern_A, Player.current.total_pattern_B, Player.current.total_pattern_C, Player.current.total_pattern_D]
