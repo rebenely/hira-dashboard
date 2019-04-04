@@ -50,7 +50,8 @@ function renderPlayers(list) {
     console.log('ay wow')
     return m("div.row[style=margin: 0 auto; padding: 90px 50%;text-align: center;display: inline-block;]", [
         m("div.spinner"),
-        m("h3", "Loading hehe")
+        m("h3", "Loading"),
+        m("h6", "or no data captured yet...")
     ])
   }
 }

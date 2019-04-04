@@ -107,17 +107,63 @@ function PieChart() {
     }
 }
 
-
 function RadarChart() {
-    var radarChart
+    var RadarChart
+    console.log(Player.current)
+    return {
+      oncreate: function(vnode) {
+          // Initialize 3rd party lib here
+
+          radarChart = new Chart(vnode.dom, {
+              type: 'radar',
+              data: {
+                  labels: ['Persistence','Help-Seeking', 'Environment Structuring', 'Time Management'],
+                  datasets: [{
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(66, 247, 81, 0.2)',
+                    ],
+                    borderColor: [
+                      'rgba(255, 99, 132, 1)',
+                      'rgba(54, 162, 235, 1)',
+                      'rgba(255, 206, 86, 1)',
+                      'rgba(66, 247, 81, 1)',
+                    ],
+                      label: "Your Skill",
+                      data: [Player.current.pe, Player.current.hs, Player.current.es, Player.current.tm]
+                  }]
+              },
+              options: {
+                title: {
+                  display: true,
+                  text: 'SRL Skills'
+                }
+              }
+          });
+          m.redraw()
+      },
+      onremove: function() {
+          // Cleanup 3rd party lib on removal
+          radarChart.destroy()
+      },
+      view: function() {
+          return m('canvas#radarChart')
+      }
+  }
+}
+
+function BarChart() {
+    var barChart
     return {
         oncreate: function(vnode) {
             // Initialize 3rd party lib here
 
-            radarChart = new Chart(vnode.dom, {
+            barChart = new Chart(vnode.dom, {
                 type: 'bar',
                 data: {
-                    labels: ['A', 'B', 'C', 'D'],
+                    labels: ['Fast-Correct', 'Slow-Correct', 'Slow-Incorrect', 'Fast-Incorrect'],
                     datasets: [{
                       backgroundColor: [
                           'rgba(255, 99, 132, 0.2)',
@@ -144,10 +190,10 @@ function RadarChart() {
         },
         onremove: function() {
             // Cleanup 3rd party lib on removal
-            radarChart.destroy()
+            barChart.destroy()
         },
         view: function() {
-            return m('canvas#radarChart')
+            return m('canvas#barChart')
         }
     }
 }
@@ -155,31 +201,26 @@ function RadarChart() {
 
 function LineChart() {
     var lineChart
+    console.log(Player.current)
     return {
         oncreate: function(vnode) {
             // Initialize 3rd party lib here
-            var scheds = []
-            for ( let i = 0; i < Player.current.schedule.length; i++) {
-              scheds.push(Player.current.schedule[i].deadline)
-            }
             lineChart = new Chart(vnode.dom, {
                 type: 'line',
                 data: {
-                    labels: [new Date().toLocaleString(), new Date("July 21, 1983 01:15:00").toLocaleString(), new Date("July 21, 1983 01:15:00").toLocaleString(), new Date("July 21, 1983 01:15:00").toLocaleString(), new Date("July 21, 1983 01:15:00").toLocaleString(), new Date("July 21, 1983 01:15:00").toLocaleString(), new Date("July 21, 1983 01:15:00").toLocaleString(), new Date("July 21, 1983 01:15:00").toLocaleString(), new Date().toLocaleString(), new Date().toLocaleString(), new Date().toLocaleString(), new Date().toLocaleString(),new Date().toLocaleString()],
-                    datasets: [{
-                        label: "Accuracy",
-                        data: [85, 68, 97, 100, 76, 85, 85, 75, 85, 85, 75, 85, 75]
-                    },
-                    {
-                        label: "SRL Score",
-                        data: [5, 8, 7, 5, 2, 6, 17, 1, 85, 85, 75, 85, 75]
-                    }
+                  labels: Player.current.schedule.map(a => a.submitted!=undefined ? a.submitted : a.deadline ),
+                  datasets: [{
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                      label: "Accuracy",
+                      data: Player.current.schedule.map(a=> a.accuracy!=undefined ? a.accuracy : 0 )
+                  }
                   ]
                 },
                 options: {
                   title: {
           					display: true,
-          					text: 'Accuracy vs SRL'
+          					text: 'Accuracy per Dungeon'
           				}
                 }
             });
@@ -218,6 +259,7 @@ module.exports = {
 }
 function renderPage(obj) {
   if(obj) {
+    Player.getAllSrl();
     return m("div", [
       m("div.row", [
         m("div.col-sm-4", [
@@ -228,7 +270,7 @@ function renderPage(obj) {
                     m("h1", Player.current.username),
                   ]),
                   m("div.col-sm-3", [
-                    m("h2[style=color: green; text-align: right;]", {class:"tooltip bottom", "aria-label": "LA Score"}, 6969),
+                    m("h2[style=color: green; text-align: right;]", {class:"tooltip bottom", "aria-label": "LA Score"}, (Player.current.pe + Player.current.hs + Player.current.es + Player.current.tm).toFixed(2)),
                   ])
                 ])
             ]),
@@ -259,26 +301,10 @@ function renderPage(obj) {
               ]),
               m("div.row", [
                 m("div.col-sm-9", [
-                      m("p", "Unskipped Items:"),
+                      m("p", "Skipped Items:"),
                 ]),
                 m("div.col-sm-3", [
-                      m("p", Player.current.total_items - Player.current.total_skips),
-                ]),
-              ]),
-              m("div.row", [
-                m("div.col-sm-9", [
-                      m("p", "Assistance Usage:"),
-                ]),
-                m("div.col-sm-3", [
-                      m("p", Math.round((Player.current.total_correct/(Player.current.total_correct + Player.current.total_possible_correct)) * 100).toString() + "%"),
-                ]),
-              ]),
-              m("div.row", [
-                m("div.col-sm-9", [
-                      m("p", "Time Utilization:"),
-                ]),
-                m("div.col-sm-3", [
-                      m("p", Math.round(((Player.current.total_items-Player.current.total_pattern_D)/(Player.current.total_items)) * 100).toString() + "%"),
+                      m("p", Player.current.total_skips == undefined ? 0 : Player.current.total_skips ),
                 ]),
               ]),
               m("div.row", [
@@ -286,7 +312,7 @@ function renderPage(obj) {
                       m("p", "Overall Accuracy:"),
                 ]),
                 m("div.col-sm-3", [
-                      m("p", Math.round(((Player.current.total_correct)/(Player.current.total_items)) * 100).toString() + "%"),
+                      m("p", (isNaN(Player.current.total_correct/Player.current.total_items) || !isFinite(Player.current.total_correct/Player.current.total_items) || Player.current.total_correct/Player.current.total_items == undefined ? 0 : Math.round((Player.current.total_correct*100)/Player.current.total_items )).toString() + "%"),
                 ]),
               ]),
 
@@ -315,7 +341,7 @@ function renderPage(obj) {
                   m("h1", "Persistence"),
                 ]),
                 m("div.section", [
-                  m(RadarChart),
+                  m(BarChart),
                 ]),
                 m("div.section", [
                   m("small[style=text-align: center;]","Patterns are defined in the paper")
@@ -372,10 +398,19 @@ function renderPage(obj) {
         m("div.col-sm-5", [
           m("div[style=padding: 10px 0px]", {class: "card fluid"}, [
             m("div.section", [
-              m("h1", "SRL vs Accuracy per Dungeon")
+              m("h1", "Accuracy per Dungeon")
             ]),
             m("div.section", [
               m(LineChart),
+            ]),
+          ]),
+
+          m("div[style=padding: 10px 0px]", {class: "card fluid"}, [
+            m("div.section", [
+              m("h1", "Skills")
+            ]),
+            m("div.section", [
+              m(RadarChart),
             ]),
           ])
         ]),
@@ -387,7 +422,8 @@ function renderPage(obj) {
     console.log('ay wow')
     return m("div.row[style=margin: 0 auto; padding: 90px 50%;text-align: center;display: inline-block;]", [
         m("div.spinner"),
-        m("h3", "Loading hehe")
+        m("h3", "Loading"),
+        m("h6", "or no data captured yet...")
     ])
   }
 
@@ -412,8 +448,8 @@ function renderCharacters(list) {
           ]),
         ])
       }),
-      m("label[syle=cursor:pointer;text-align:center;margin: auto;]", {"for": "modal-control", "class": "button"}, "Show All"),
-      m("input[syle=cursor:pointer;]", {"type": "checkbox", "class": "modal", "id": "modal-control"}),
+      m("label[style=cursor:pointer;text-align:center;margin: auto;]", {"for": "modal-control", "class": "button"}, "Show All"),
+      m("input[style=cursor:pointer;]", {"type": "checkbox", "class": "modal", "id": "modal-control"}),
       m("div.row", [
         m("div.card", [
           m("label.modal-close", {"for": "modal-control"}),
@@ -453,7 +489,8 @@ function renderCharacters(list) {
     console.log('ay wow')
     return m("div.row[style=margin: 0 auto; padding: 20px 30%;text-align: center;display: inline-block;]", [
         m("div.spinner"),
-        m("h3", "Loading hehe")
+        m("h3", "Loading"),
+        m("h6", "or no data captured yet...")
     ])
   }
 }
@@ -479,7 +516,8 @@ function renderDungeons(list) {
     console.log('ay wow')
     return m("div.row[style=margin: 0 auto; padding: 20px 30%;text-align: center;display: inline-block;]", [
         m("div.spinner"),
-        m("h3", "Loading hehe")
+        m("h3", "Loading"),
+        m("h6", "or no data captured yet...")
     ])
   }
 }
