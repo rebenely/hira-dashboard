@@ -156,6 +156,9 @@ var Player = {
           found = true
           m.redraw()
           console.log('found me')
+          Player.current.encounters.sort((a,b)=>{
+            return b.accuracy - a.accuracy
+          })
         }
       }
     } else {

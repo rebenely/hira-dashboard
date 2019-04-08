@@ -331,7 +331,7 @@ function renderPage(obj) {
                   m(PieChart),
                 ]),
                 m("div.section", [
-                  m("small[style=text-align: center;]","Does not necessarily show all time usage but proportions")
+                  m("small[style=text-align: center;]","Shows time usage proportions")
                 ]),
               ])
             ]),
@@ -344,7 +344,7 @@ function renderPage(obj) {
                   m(BarChart),
                 ]),
                 m("div.section", [
-                  m("small[style=text-align: center;]","Patterns are defined in the paper")
+                  m("small[style=text-align: center;]","Patterns on how you answer goblin questions")
                 ]),
               ])
             ])
