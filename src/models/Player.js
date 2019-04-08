@@ -35,7 +35,7 @@ var Player = {
 
       //Review Count
       value = 0;
-      if(Player.list[i].review_count < Player.list[i].schedule.length){
+      if(Player.list[i].review_count < Player.list[i].schedule.length || Player.list[i].schedule.length == 0){
         value = Player.list[i].total_correct/Player.list[i].total_items;
       }
       else{
