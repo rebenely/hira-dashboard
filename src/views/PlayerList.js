@@ -23,7 +23,7 @@ function renderPlayers(list) {
                      m("p", "Completion:"),
                ]),
                m("div.col-sm-5", [
-                     m("p",((user.story/40.0)*100 > 100 ? 100 : (user.story/40.0)*100).toString() +"%"),
+                     m("p",((user.story/40.0)*100 > 100 ? 100 : (user.story/40.0)*100).toFixed(2) +"%"),
                ]),
              ]),
              m("div.row", [
