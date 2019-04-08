@@ -15,6 +15,12 @@ var Player = {
       Player.list[i].es = 0;
       Player.list[i].tm = 0;
 
+      if(Player.list[i].total_items != 0){
+          Player.list[i].accuracy = Player.list[i].total_correct/Player.list[i].total_items;
+      } else {
+          Player.list[i].accuracy = 0;
+      }
+
       //Time vs Acuracy
       value = ((Player.list[i].total_pattern_B+Player.list[i].total_pattern_C)/(Player.list[i].total_items-Player.list[i].total_pattern_A))
       Player.list[i].pe += isNaN(value) || !isFinite(value) ? 0 : value*.3
@@ -25,7 +31,7 @@ var Player = {
         value += Player.list[i].encounters[j].accuracy;
       }
       value/=Player.list[i].encounters.length;
-      Player.list[i].pe += isNaN(value) || !isFinite(value) ? 0 : value*.35 
+      Player.list[i].pe += isNaN(value) || !isFinite(value) ? 0 : value*.35
 
       //Unskipped Items
       value = ((Player.list[i].total_items-Player.list[i].total_skips)/(Player.list[i].total_items))
@@ -47,11 +53,11 @@ var Player = {
       //Assistance Usage
       value =(Player.list[i].total_correct)/(Player.list[i].total_correct + Player.list[i].total_possible_correct)
       Player.list[i].hs += isNaN(value) || !isFinite(value) ? 0 : value*.5
-      
+
       Player.list[i].hs *= 25
 
 
-      //Idle + Distraction Time vs Playing Time 
+      //Idle + Distraction Time vs Playing Time
       value = (Player.list[i].total_playtime-Player.list[i].total_idle-Player.list[i].total_distracted)/(Player.list[i].total_playtime)
       Player.list[i].es += isNaN(value) || !isFinite(value) ? 0 : value
       console.log(value)
@@ -88,6 +94,9 @@ var Player = {
 
       Player.list[i].tm *= 25;
     }
+    Player.list.sort((a,b)=>{
+      return b.accuracy - a.accuracy
+    })
   },
   loadList: function () {
     return m.request({
@@ -111,7 +120,7 @@ var Player = {
       valuemaxInd = Player.list[maxInd].total_correct/Player.list[maxInd].total_items;
       valuei = Player.list[i].total_correct/Player.list[i].total_items
       if( (isNaN(valuemaxInd) || !isFinite(valuemaxInd) ? 0 : valuemaxInd) < (isNaN(valuei) || !isFinite(valuei) ? 0 : valuei)) {
-        maxInd = i;   
+        maxInd = i;
       }
     }
     return Player.list[maxInd]
