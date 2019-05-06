@@ -15,6 +15,12 @@ var Player = {
       Player.list[i].es = 0;
       Player.list[i].tm = 0;
 
+      if(Player.list[i].total_items != 0){
+          Player.list[i].accuracy = Player.list[i].total_correct/Player.list[i].total_items;
+      } else {
+          Player.list[i].accuracy = 0;
+      }
+
       //Time vs Acuracy
       value = ((Player.list[i].total_pattern_C)/(Player.list[i].total_pattern_C+Player.list[i].total_pattern_D))
       Player.list[i].pe += isNaN(value) || !isFinite(value) ? 0 : value*.4
@@ -26,7 +32,11 @@ var Player = {
         value += Player.list[i].encounters[j].accuracy;
       }
       value/=Player.list[i].encounters.length;
+<<<<<<< HEAD
       Player.list[i].pe += isNaN(value) || !isFinite(value) ? 0 : value*.3
+=======
+      Player.list[i].pe += isNaN(value) || !isFinite(value) ? 0 : value*.35
+>>>>>>> 044fdb6e6670a8fcde00c69446fc64d1db5cbf15
 
       //Unskipped Items
       value = ((Player.list[i].total_items-Player.list[i].total_skips)/(Player.list[i].total_items))
@@ -60,11 +70,11 @@ var Player = {
         value/=Player.list[i].dungeon_runs.length
       }
       Player.list[i].hs += isNaN(value) || !isFinite(value) ? 0 : value*.5
-      
+
       Player.list[i].hs *= 25
 
 
-      //Idle + Distraction Time vs Playing Time 
+      //Idle + Distraction Time vs Playing Time
       value = (Player.list[i].total_playtime-Player.list[i].total_idle-Player.list[i].total_distracted)/(Player.list[i].total_playtime)
       Player.list[i].es += isNaN(value) || !isFinite(value) ? 0 : value
 
@@ -96,6 +106,9 @@ var Player = {
 
       Player.list[i].tm *= 25;
     }
+    Player.list.sort((a,b)=>{
+      return b.accuracy - a.accuracy
+    })
   },
   loadList: function () {
     return m.request({
@@ -118,7 +131,7 @@ var Player = {
       valuemaxInd = Player.list[maxInd].total_correct/Player.list[maxInd].total_items;
       valuei = Player.list[i].total_correct/Player.list[i].total_items
       if( (isNaN(valuemaxInd) || !isFinite(valuemaxInd) ? 0 : valuemaxInd) < (isNaN(valuei) || !isFinite(valuei) ? 0 : valuei)) {
-        maxInd = i;   
+        maxInd = i;
       }
     }
     return Player.list[maxInd]
@@ -153,6 +166,13 @@ var Player = {
           Player.current = Player.list[i]
           found = true
           m.redraw()
+<<<<<<< HEAD
+=======
+          console.log('found me')
+          Player.current.encounters.sort((a,b)=>{
+            return b.accuracy - a.accuracy
+          })
+>>>>>>> 044fdb6e6670a8fcde00c69446fc64d1db5cbf15
         }
       }
     } else {

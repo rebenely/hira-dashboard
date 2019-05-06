@@ -276,7 +276,7 @@ function renderPage(obj) {
                       m("p", "Completion:"),
                 ]),
                 m("div.col-sm-3", [
-                      m("p", ((Player.current.story/40.0)*100 > 100 ? 100 : (Player.current.story/40.0)*100).toString() +"%"),
+                      m("p", ((Player.current.story/40.0)*100 > 100 ? 100 : (Player.current.story/40.0)*100).toFixed(2) +"%"),
                 ]),
               ]),
               m("div.row", [
@@ -308,7 +308,7 @@ function renderPage(obj) {
                       m("p", "Overall Accuracy:"),
                 ]),
                 m("div.col-sm-3", [
-                      m("p", (isNaN(Player.current.total_correct/Player.current.total_items) || !isFinite(Player.current.total_correct/Player.current.total_items) || Player.current.total_correct/Player.current.total_items == undefined ? 0 : Math.round((Player.current.total_correct*100)/Player.current.total_items )).toString() + "%"),
+                      m("p", (Player.current.accuracy*100).toFixed(2) + "%"),
                 ]),
               ]),
 
@@ -327,7 +327,7 @@ function renderPage(obj) {
                   m(PieChart),
                 ]),
                 m("div.section", [
-                  m("small[style=text-align: center;]","Does not necessarily show all time usage but proportions")
+                  m("small[style=text-align: center;]","Shows time usage proportions")
                 ]),
               ])
             ]),
@@ -340,7 +340,7 @@ function renderPage(obj) {
                   m(BarChart),
                 ]),
                 m("div.section", [
-                  m("small[style=text-align: center;]","Patterns are defined in the paper")
+                  m("small[style=text-align: center;]","Patterns on how you answer goblin questions")
                 ]),
               ])
             ])

@@ -13,7 +13,7 @@ function renderPlayers(list) {
   if (list.length > 0) {
     return list.map(function(user) {
         return m("div[style=margin: 10px 5px;]", {class :"card small"}, [
-           m("div.section[style=cursor:pointer;]", {href: "/player/" + user.username, oncreate: m.route.link},[
+           m("div.section[style=cursor:pointer;background-color: lightblue;]", {href: "/player/" + user.username, oncreate: m.route.link},[
              m("h5",  user.username)
            ]),
            m("div.section", [
@@ -22,7 +22,7 @@ function renderPlayers(list) {
                      m("p", "Completion:"),
                ]),
                m("div.col-sm-5", [
-                     m("p",((user.story/40.0)*100 > 100 ? 100 : (user.story/40.0)*100).toString() +"%"),
+                     m("p",((user.story/40.0)*100 > 100 ? 100 : (user.story/40.0)*100).toFixed(2) +"%"),
                ]),
              ]),
              m("div.row", [
@@ -30,7 +30,15 @@ function renderPlayers(list) {
                      m("p", "Sessions:"),
                ]),
                m("div.col-sm-5", [
-                     m("p", user.session - 1),
+                     m("p", user.session),
+               ]),
+             ]),
+             m("div.row", [
+               m("div.col-sm-7", [
+                     m("p", "Accuracy:"),
+               ]),
+               m("div.col-sm-5", [
+                     m("p", (user.accuracy * 100).toFixed(2) + "%"),
                ]),
              ]),
              m("div.row", [
