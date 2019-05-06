@@ -106,7 +106,6 @@ function TryChart() {
 }
 
 function renderFinishedUsers (finished, row) {
-  console.log(finished)
   if (finished.length > 0){
     return finished.map(function(a, index) {
       return  [m("div.col-sm-1[style=text-align: right;]", [m("p", (index*8)+row)]),

@@ -16,8 +16,9 @@ var Player = {
       Player.list[i].tm = 0;
 
       //Time vs Acuracy
-      value = ((Player.list[i].total_pattern_B+Player.list[i].total_pattern_C)/(Player.list[i].total_items-Player.list[i].total_pattern_A))
-      Player.list[i].pe += isNaN(value) || !isFinite(value) ? 0 : value*.3
+      value = ((Player.list[i].total_pattern_C)/(Player.list[i].total_pattern_C+Player.list[i].total_pattern_D))
+      Player.list[i].pe += isNaN(value) || !isFinite(value) ? 0 : value*.4
+
       value = 0;
 
       //Accuracy vs Character
@@ -25,17 +26,18 @@ var Player = {
         value += Player.list[i].encounters[j].accuracy;
       }
       value/=Player.list[i].encounters.length;
-      Player.list[i].pe += isNaN(value) || !isFinite(value) ? 0 : value*.35 
+      Player.list[i].pe += isNaN(value) || !isFinite(value) ? 0 : value*.3
 
       //Unskipped Items
       value = ((Player.list[i].total_items-Player.list[i].total_skips)/(Player.list[i].total_items))
-      Player.list[i].pe += isNaN(value) || !isFinite(value) ? 0 : value*.35
+      Player.list[i].pe += isNaN(value) || !isFinite(value) ? 0 : value*.3
 
       Player.list[i].pe *= 25
 
+
       //Review Count
       value = 0;
-      if(Player.list[i].review_count < Player.list[i].schedule.length || Player.list[i].schedule.length == 0){
+      if(Player.list[i].review_count < (Player.list[i].schedule.length +  Math.ceil(Player.list[i].schedule.length/2))|| Player.list[i].schedule.length == 0){
         value = Player.list[i].total_correct/Player.list[i].total_items;
       }
       else{
@@ -45,7 +47,18 @@ var Player = {
       Player.list[i].hs += isNaN(value) || !isFinite(value) ? 0 : value*.5
 
       //Assistance Usage
-      value =(Player.list[i].total_correct)/(Player.list[i].total_correct + Player.list[i].total_possible_correct)
+      value = 0;
+      if(typeof Player.list[i].dungeon_runs != "undefined"){
+        for (let j = 0; j < Player.list[i].dungeon_runs.length ; j++){
+          if(Player.list[i].dungeon_runs[j].total_items-Player.list[i].dungeon_runs[j].total_correct <= 1){
+            value+=1
+          }
+          else if(Player.list[i].dungeon_runs[j].total_perks != 0){
+            value+=1
+          }
+        }
+        value/=Player.list[i].dungeon_runs.length
+      }
       Player.list[i].hs += isNaN(value) || !isFinite(value) ? 0 : value*.5
       
       Player.list[i].hs *= 25
@@ -54,15 +67,15 @@ var Player = {
       //Idle + Distraction Time vs Playing Time 
       value = (Player.list[i].total_playtime-Player.list[i].total_idle-Player.list[i].total_distracted)/(Player.list[i].total_playtime)
       Player.list[i].es += isNaN(value) || !isFinite(value) ? 0 : value
-      console.log(value)
-      Player.list[i].es *= 25;
-      //Progress
-      value = (Player.list[i].story >= 40 ? 1 : Player.list[i].story/40)
-      Player.list[i].tm += isNaN(value) || !isFinite(value) ? 0 : value*.35
 
-      //Time Utilization
-      value =(Player.list[i].total_items-Player.list[i].total_pattern_D-Player.list[i].total_skips-Player.list[i].total_no_answer)/(Player.list[i].total_items)
-      Player.list[i].tm += isNaN(value) || !isFinite(value) ? 0 : value*.3
+      Player.list[i].es *= 25;
+
+      //Cramming Tendency
+      //Manually got from the raw dataset (form and MongoDB database) 
+      notcrammed = ['miikaaachuu','bloodlustaxe','Bugs','Zenith09','oneeyedkid','weetitit','MeWantPizza','RoguMogu','Deanne','mrs. captain america <3','Kristan Gabay','ed','aemaranon','eury','pinathbutter','Yanfrey']
+      value = (notcrammed.includes(Player.list[i].username)? .5 : 0) + (Player.list[i].story > 24 ? .25 : 0 ) + (Player.list[i].story >= 40 ? .25 : 0 ) 
+
+      Player.list[i].tm += value*.5
 
       //Schedule Compliance
       value = 0;
@@ -70,21 +83,16 @@ var Player = {
       for( j = 0 ; j < Player.list[i].schedule.length ; j++){
         if (Player.list[i].schedule[j].submitted != undefined){
           let overtime = moment(Player.list[i].schedule[j].submitted).diff(moment(Player.list[i].schedule[j].deadline), 'minutes');
-          if( overtime < 30){
-            if(overtime >= 0 ){
-              value+=(1-((.1)*(overtime/3)))
-            }
-            else{
-              value+=1
-            }
+          if( overtime <= 0){
+            value+=.11
           }
         }
         else{
           break;
         }
       }
-      value = value/j
-      Player.list[i].tm += isNaN(value) || !isFinite(value) ? 0 : value*.35
+      value = (value == .99 ? 1 : value)
+      Player.list[i].tm += isNaN(value) || !isFinite(value) ? 0 : value*.5
 
       Player.list[i].tm *= 25;
     }
@@ -97,7 +105,6 @@ var Player = {
       background: true
     })
     .then(function(result) {
-      console.log(result)
       Player.list = result.players
       Player.getAllSrl()
       m.redraw()
@@ -146,7 +153,6 @@ var Player = {
           Player.current = Player.list[i]
           found = true
           m.redraw()
-          console.log('found me')
         }
       }
     } else {

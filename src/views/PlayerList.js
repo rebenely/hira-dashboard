@@ -11,7 +11,6 @@ module.exports = {
 function renderPlayers(list) {
 
   if (list.length > 0) {
-    console.log('ay wow')
     return list.map(function(user) {
         return m("div[style=margin: 10px 5px;]", {class :"card small"}, [
            m("div.section[style=cursor:pointer;]", {href: "/player/" + user.username, oncreate: m.route.link},[
@@ -47,7 +46,6 @@ function renderPlayers(list) {
         ])
     })
   } else {
-    console.log('ay wow')
     return m("div.row[style=margin: 0 auto; padding: 90px 50%;text-align: center;display: inline-block;]", [
         m("div.spinner"),
         m("h3", "Loading"),

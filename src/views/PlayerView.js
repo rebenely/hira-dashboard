@@ -62,7 +62,6 @@ function PieChart() {
     return {
         oncreate: function(vnode) {
             Player.current.exs_time = Player.current.total_playtime - Math.round(Player.current.total_battle_time) - Player.current.total_distracted - Player.current.total_idle
-            console.log(Player.current.exs_time)
             // Initialize 3rd party lib here
             pieChart = new Chart(vnode.dom, {
                 type: 'doughnut',
@@ -109,7 +108,6 @@ function PieChart() {
 
 function RadarChart() {
     var RadarChart
-    console.log(Player.current)
     return {
       oncreate: function(vnode) {
           // Initialize 3rd party lib here
@@ -201,7 +199,6 @@ function BarChart() {
 
 function LineChart() {
     var lineChart
-    console.log(Player.current)
     return {
         oncreate: function(vnode) {
             // Initialize 3rd party lib here
@@ -239,7 +236,6 @@ function LineChart() {
 
 module.exports = {
   oninit: function(vnode) {
-    console.log('ay', vnode.attrs)
     if(Player.list.length == 0) {
       Player.loadList()
       m.redraw()
@@ -419,7 +415,6 @@ function renderPage(obj) {
     ])
   ])
   } else {
-    console.log('ay wow')
     return m("div.row[style=margin: 0 auto; padding: 90px 50%;text-align: center;display: inline-block;]", [
         m("div.spinner"),
         m("h3", "Loading"),
@@ -433,7 +428,6 @@ function renderPage(obj) {
 function renderCharacters(list) {
 
   if (list.length > 0) {
-    console.log('ay wow!')
     return m("div", [
       list.slice(0, 13).map(function(chara) {
         return m("div.row", [
@@ -486,7 +480,6 @@ function renderCharacters(list) {
     ])
 
   } else {
-    console.log('ay wow')
     return m("div.row[style=margin: 0 auto; padding: 20px 30%;text-align: center;display: inline-block;]", [
         m("div.spinner"),
         m("h3", "Loading"),
@@ -498,7 +491,6 @@ function renderCharacters(list) {
 function renderDungeons(list) {
 
   if (list.length > 0) {
-    console.log('ay wow!')
     return list.map(function(item) {
         return m("div.row", [
           m("div.col-sm-4", [
@@ -513,7 +505,6 @@ function renderDungeons(list) {
         ])
     })
   } else {
-    console.log('ay wow')
     return m("div.row[style=margin: 0 auto; padding: 20px 30%;text-align: center;display: inline-block;]", [
         m("div.spinner"),
         m("h3", "Loading"),
