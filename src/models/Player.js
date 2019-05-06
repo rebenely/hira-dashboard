@@ -32,11 +32,7 @@ var Player = {
         value += Player.list[i].encounters[j].accuracy;
       }
       value/=Player.list[i].encounters.length;
-<<<<<<< HEAD
       Player.list[i].pe += isNaN(value) || !isFinite(value) ? 0 : value*.3
-=======
-      Player.list[i].pe += isNaN(value) || !isFinite(value) ? 0 : value*.35
->>>>>>> 044fdb6e6670a8fcde00c69446fc64d1db5cbf15
 
       //Unskipped Items
       value = ((Player.list[i].total_items-Player.list[i].total_skips)/(Player.list[i].total_items))
@@ -166,13 +162,6 @@ var Player = {
           Player.current = Player.list[i]
           found = true
           m.redraw()
-<<<<<<< HEAD
-=======
-          console.log('found me')
-          Player.current.encounters.sort((a,b)=>{
-            return b.accuracy - a.accuracy
-          })
->>>>>>> 044fdb6e6670a8fcde00c69446fc64d1db5cbf15
         }
       }
     } else {
